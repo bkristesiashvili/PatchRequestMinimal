@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ACAE82D3-B60
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatchRequest", "src\PatchRequest\PatchRequest.csproj", "{2F01E54C-C39C-4B7A-8001-5307A300D5DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatchRequest.Test", "PatchRequest.Test\PatchRequest.Test.csproj", "{7CA8E955-E9CC-4CC8-9129-DF2C43C2AF07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{2F01E54C-C39C-4B7A-8001-5307A300D5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F01E54C-C39C-4B7A-8001-5307A300D5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F01E54C-C39C-4B7A-8001-5307A300D5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CA8E955-E9CC-4CC8-9129-DF2C43C2AF07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CA8E955-E9CC-4CC8-9129-DF2C43C2AF07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CA8E955-E9CC-4CC8-9129-DF2C43C2AF07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CA8E955-E9CC-4CC8-9129-DF2C43C2AF07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2F01E54C-C39C-4B7A-8001-5307A300D5DB} = {ACAE82D3-B609-4518-86DC-3AEB33D96C4B}

@@ -1,12 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>Patch Request Processing for Minimal API</Title>
-    <Authors>Besik Kristesiashvili</Authors>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>11</LangVersion>
+		<Nullable>disable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Patch Request Processing for Minimal API</Title>
+		<Authors>Besik Kristesiashvili</Authors>
+		<PackageProjectUrl>https://github.com/bkristesiashvili/PatchRequestMinimal.git</PackageProjectUrl>
+		<PackageId>PatchRequestMinimal</PackageId>
+		<Version>7.0.13</Version>
+	</PropertyGroup>
 
 </Project>
