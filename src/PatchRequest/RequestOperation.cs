@@ -19,6 +19,7 @@ public sealed class RequestOperation<TModel> where TModel : class
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(Value);
 
+        _requestResolver.ValidateModel<TModel>(Property);
         _requestResolver.Replace(Property, source, Value);
     }
 
@@ -27,6 +28,7 @@ public sealed class RequestOperation<TModel> where TModel : class
         ArgumentException.ThrowIfNullOrEmpty(Property);
         ArgumentNullException.ThrowIfNull(source);
 
+        _requestResolver.ValidateModel<TModel>(Property);
         _requestResolver.Remove(Property, source);
     }
 }

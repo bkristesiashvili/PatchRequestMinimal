@@ -14,6 +14,17 @@ internal sealed class PatchRequestContractResolver : IPatchRequestContractResolv
         SetValue(path, source, jsonElement);
     }
 
+    public void ValidateModel<TModel>(string path)
+    {
+        Type sourceType = typeof(TModel);
+        IEnumerable<string> modelProperties = path.Split('.');
+        foreach (var modelProperty in modelProperties)
+        {
+            PropertyInfo property = GetProperty(sourceType, modelProperty);
+            sourceType = property.PropertyType;
+        }
+    }
+
     #region PRIVATE MEMBERS
 
     private static void SetValue<TSource>(string requestPath, TSource source, JsonElement? value)

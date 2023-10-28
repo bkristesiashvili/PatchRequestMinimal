@@ -1,5 +1,17 @@
 namespace PatchRequest.Tests;
 
+public sealed class HomeRequest
+{
+    public Guid Id { get; set; }
+    public AddressRequest Address { get; set; }
+}
+
+public sealed class AddressRequest
+{
+    public string City { get; set; }
+    public string Street { get; set; }
+}
+
 public sealed class ReplaceActionsTests : ActionsTest
 {
     [Fact]
@@ -9,7 +21,7 @@ public sealed class ReplaceActionsTests : ActionsTest
         Home home = new(id, "27", 3, 1, new("Tbilisi", "Sturua"));
         Home homeExpected = home with { Id = new Guid("ed8215fc-cbab-4dab-a28f-eed7dc128e5f") };
 
-        PatchRequest<Home> patchRequest = CreatePatchWithOperations(new RequestOperation<Home>()
+        PatchRequest<HomeRequest> patchRequest = CreatePatchWithOperations(new RequestOperation<HomeRequest>()
         {
             Action = "replace",
             Property = $"{nameof(Home.Id)}",
@@ -99,11 +111,16 @@ public sealed class ReplaceActionsTests : ActionsTest
         Home home = new(id, "27", 3, 1, new("Tbilisi", "Sturua"));
         Home homeExpected = home with { Address = new Address("Batumi", "Sturua11111") };
 
-        PatchRequest<Home> patchRequest = CreatePatchWithOperations(new RequestOperation<Home>()
+        PatchRequest<HomeRequest> patchRequest = CreatePatchWithOperations(new RequestOperation<HomeRequest>()
         {
             Action = "replace",
             Property = $"{nameof(Home.Address)}",
-            Value = new Address("Batumi", "Sturua11111")
+            Value = new AddressRequest
+            {
+                City = "Batumi",
+                Street = "Sturua11111"
+            }
+
         });
 
         var requested = ConvertAsRequested(patchRequest);

@@ -15,12 +15,7 @@
 		<PackageTags>Http Patch Minimal API</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<ApplicationIcon>patch-logo-removebg-preview.ico</ApplicationIcon>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Content Include="patch-logo-removebg-preview.ico" />
-	</ItemGroup>
 
 	<ItemGroup>
 	  <None Include="..\..\Assets\patch-logo-removebg-preview.png">
