@@ -12,15 +12,15 @@ public sealed class PatchRequest<TModel> where TModel : class
 
     public void Apply<TSource>(TSource source)
     {
-        foreach (var action in Operations)
+        foreach (var operation in Operations)
         {
-            if (action.Action.Equals(REPLACE_ACTION, StringComparison.OrdinalIgnoreCase))
+            if (operation.Action.Equals(REPLACE_ACTION, StringComparison.OrdinalIgnoreCase))
             {
-                action.Replace(source);
+                operation.Replace(source);
             }
-            else if (action.Action.Equals(REMOVE_ACTION, StringComparison.OrdinalIgnoreCase))
+            else if (operation.Action.Equals(REMOVE_ACTION, StringComparison.OrdinalIgnoreCase))
             {
-                action.Remove(source);
+                operation.Remove(source);
             }
         }
     }
