@@ -11,15 +11,15 @@
 		<PackageProjectUrl>https://github.com/bkristesiashvili/PatchRequestMinimal.git</PackageProjectUrl>
 		<PackageId>PatchRequestMinimal</PackageId>
 		<Version>7.0.13</Version>
-		<ApplicationIcon>patch-logo-removebg-preview.png</ApplicationIcon>
 		<PackageIcon>patch-logo-removebg-preview.png</PackageIcon>
 		<PackageTags>Http Patch Minimal API</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<ApplicationIcon>patch-logo-removebg-preview.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Include="patch-logo-removebg-preview.png" />
+	  <Content Include="patch-logo-removebg-preview.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
