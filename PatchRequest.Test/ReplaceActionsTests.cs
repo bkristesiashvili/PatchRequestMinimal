@@ -6,7 +6,7 @@ public sealed record Address(string City, string Street);
 
 public sealed record Home(Guid Id, string Number, int RoomsCount, Address Address);
 
-public class UnitTest1
+public sealed class ReplaceActionsTests
 {
     [Fact]
     public void ReplaceIdTest()
