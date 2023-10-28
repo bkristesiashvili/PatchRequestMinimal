@@ -11,6 +11,30 @@
 		<PackageProjectUrl>https://github.com/bkristesiashvili/PatchRequestMinimal.git</PackageProjectUrl>
 		<PackageId>PatchRequestMinimal</PackageId>
 		<Version>7.0.13</Version>
+		<ApplicationIcon>patch-logo-removebg-preview.png</ApplicationIcon>
+		<PackageIcon>patch-logo-removebg-preview.png</PackageIcon>
+		<PackageTags>Http Patch Minimal API</PackageTags>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="patch-logo-removebg-preview.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\Assets\patch-logo-removebg-preview.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 </Project>
