@@ -10,7 +10,7 @@
 		<Authors>Besik Kristesiashvili</Authors>
 		<PackageProjectUrl>https://github.com/bkristesiashvili/PatchRequestMinimal.git</PackageProjectUrl>
 		<PackageId>PatchRequestMinimal</PackageId>
-		<Version>7.0.16</Version>
+		<Version>7.0.17</Version>
 		<PackageIcon>new.png</PackageIcon>
 		<PackageTags>Http Patch Minimal API</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
