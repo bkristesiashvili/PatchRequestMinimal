@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using PatchRequest.Resolvers;
+
+using System.Text.Json.Serialization;
 
 namespace PatchRequest;
 
@@ -10,18 +12,29 @@ public sealed class PatchRequest<TModel> where TModel : class
 
     public ICollection<RequestOperation<TModel>> Operations { get; set; } = new List<RequestOperation<TModel>>();
 
-    public void Apply<TSource>(TSource source)
+    public RequestResult Apply<TSource>(TSource source)
     {
+        RequestResult result = RequestResult.Default;
+
         foreach (var operation in Operations)
         {
-            if (operation.Action.Equals(REPLACE_ACTION, StringComparison.OrdinalIgnoreCase))
+            try
             {
-                operation.Replace(source);
+                if (operation.Action.Equals(REPLACE_ACTION, StringComparison.OrdinalIgnoreCase))
+                {
+                    operation.Replace(source);
+                }
+                else if (operation.Action.Equals(REMOVE_ACTION, StringComparison.OrdinalIgnoreCase))
+                {
+                    operation.Remove(source);
+                }
             }
-            else if (operation.Action.Equals(REMOVE_ACTION, StringComparison.OrdinalIgnoreCase))
+            catch (Exception ex)
             {
-                operation.Remove(source);
+                result.AddError(ex);
             }
         }
+
+        return result;
     }
 }

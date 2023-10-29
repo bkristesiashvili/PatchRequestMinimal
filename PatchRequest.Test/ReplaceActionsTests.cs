@@ -1,3 +1,5 @@
+using PatchRequest.Resolvers;
+
 namespace PatchRequest.Tests;
 
 public sealed class HomeRequest
@@ -30,9 +32,10 @@ public sealed class ReplaceActionsTests : ActionsTest
 
         var requested = ConvertAsRequested(patchRequest);
 
-        requested.Apply(home);
+        RequestResult result = requested.Apply(home);
 
         Assert.Equal(homeExpected, home);
+        Assert.True(result.Succeeded);
     }
 
     [Fact]
@@ -57,9 +60,10 @@ public sealed class ReplaceActionsTests : ActionsTest
 
         var requested = ConvertAsRequested(patchRequest);
 
-        requested.Apply(home);
+        RequestResult result = requested.Apply(home);
 
         Assert.Equal(homeExpected, home);
+        Assert.True(result.Succeeded);
     }
 
     [Fact]
@@ -78,9 +82,10 @@ public sealed class ReplaceActionsTests : ActionsTest
 
         var requested = ConvertAsRequested(patchRequest);
 
-        requested.Apply(home);
+        RequestResult result = requested.Apply(home);
 
-        Assert.Equal(homeExpected.RoomsCount, home.RoomsCount);
+        Assert.Equal(homeExpected, home);
+        Assert.True(result.Succeeded);
     }
 
     [Fact]
@@ -99,9 +104,10 @@ public sealed class ReplaceActionsTests : ActionsTest
 
         var requested = ConvertAsRequested(patchRequest);
 
-        requested.Apply(home);
+        RequestResult result = requested.Apply(home);
 
         Assert.Equal(homeExpected, home);
+        Assert.True(result.Succeeded);
     }
 
     [Fact]
@@ -125,8 +131,47 @@ public sealed class ReplaceActionsTests : ActionsTest
 
         var requested = ConvertAsRequested(patchRequest);
 
-        requested.Apply(home);
+        RequestResult result = requested.Apply(home);
 
         Assert.Equal(homeExpected, home);
+        Assert.True(result.Succeeded);
+    }
+
+    [Fact]
+    public void ReplaceFailedTest()
+    {
+        Guid id = new("983f689b-55fc-43d6-8c40-763a48010718");
+        Home home = new(id, "27", 3, 1, new("Tbilisi", "Sturua"));
+
+        PatchRequest<HomeRequest> patchRequest = CreatePatchWithOperations(new RequestOperation<HomeRequest>()
+        {
+            Action = "replace",
+            Property = $"{nameof(Home.Number)}",
+            Value = new AddressRequest
+            {
+                City = "Batumi",
+                Street = "Sturua11111"
+            }
+
+        }, new RequestOperation<HomeRequest>()
+        {
+            Action = "replace",
+            Property = $"{nameof(Home.Id)}",
+            Value = new AddressRequest
+            {
+                City = "Batumi",
+                Street = "Sturua11111"
+            }
+
+        });
+
+        var requested = ConvertAsRequested(patchRequest);
+
+        RequestResult result = requested.Apply(home);
+
+        foreach (var error in result.Messages)
+        {
+            Assert.False(result.Succeeded, error.Description);
+        }
     }
 }

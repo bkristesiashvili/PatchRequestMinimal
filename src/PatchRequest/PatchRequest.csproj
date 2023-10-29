@@ -10,15 +10,15 @@
 		<Authors>Besik Kristesiashvili</Authors>
 		<PackageProjectUrl>https://github.com/bkristesiashvili/PatchRequestMinimal.git</PackageProjectUrl>
 		<PackageId>PatchRequestMinimal</PackageId>
-		<Version>7.0.13</Version>
-		<PackageIcon>patch-logo-removebg-preview.png</PackageIcon>
+		<Version>7.0.16</Version>
+		<PackageIcon>new.png</PackageIcon>
 		<PackageTags>Http Patch Minimal API</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\Assets\patch-logo-removebg-preview.png">
+	  <None Include="..\..\Assets\new.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
