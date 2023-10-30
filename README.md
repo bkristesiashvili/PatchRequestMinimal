@@ -8,7 +8,7 @@ helps to process patch request from the minimalAPI
 Install my-project with dotnet-cli
 
 ```bash
-  dotnet add package PatchRequestMinimal --version 7.0.17
+  dotnet add package PatchRequestMinimal --version 7.0.18
 ```
     
 ## Features
