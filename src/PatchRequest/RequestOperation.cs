@@ -1,4 +1,5 @@
 ﻿using PatchRequest.Resolvers;
+
 using System.Text.Json.Serialization;
 
 namespace PatchRequest;
@@ -19,8 +20,8 @@ public sealed class RequestOperation<TModel> where TModel : class
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(Value);
 
-        _requestResolver.ValidateModel<TModel>(Property);
-        _requestResolver.Replace(Property, source, Value);
+        _requestResolver.ValidateModel(this);
+        _requestResolver.Replace(this, source, Value);
     }
 
     public void Remove(object source)
@@ -28,7 +29,7 @@ public sealed class RequestOperation<TModel> where TModel : class
         ArgumentException.ThrowIfNullOrEmpty(Property);
         ArgumentNullException.ThrowIfNull(source);
 
-        _requestResolver.ValidateModel<TModel>(Property);
-        _requestResolver.Remove(Property, source);
+        _requestResolver.ValidateModel(this);
+        _requestResolver.Remove(this, source);
     }
 }

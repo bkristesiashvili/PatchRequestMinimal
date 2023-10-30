@@ -1,23 +1,25 @@
 ﻿using System.Reflection;
+using System.Security.AccessControl;
 using System.Text.Json;
 
 namespace PatchRequest.Resolvers;
 
 internal sealed class PatchRequestContractResolver : IPatchRequestContractResolver
 {
-    public void Remove<TSource>(string path, TSource source) => SetValue(path, source, default);
-
-    public void Replace<TSource>(string path, TSource source, object value)
+    public void Replace<TSource, TModel>(RequestOperation<TModel> operation, TSource source, object value) where TModel : class
     {
         JsonElement jsonElement = value is null ? new() : (JsonElement)value;
 
-        SetValue(path, source, jsonElement);
+        SetValue(operation, source, jsonElement);
     }
 
-    public void ValidateModel<TModel>(string path)
+    public void Remove<TSource, TModel>(RequestOperation<TModel> operation, TSource source) where TModel : class
+        => SetValue(operation, source, default);
+
+    public void ValidateModel<TModel>(RequestOperation<TModel> operation) where TModel : class
     {
         Type sourceType = typeof(TModel);
-        IEnumerable<string> modelProperties = path.Split('.');
+        IEnumerable<string> modelProperties = operation.Property.Split('.');
         foreach (var modelProperty in modelProperties)
         {
             PropertyInfo property = GetProperty(sourceType, modelProperty);
@@ -27,12 +29,14 @@ internal sealed class PatchRequestContractResolver : IPatchRequestContractResolv
 
     #region PRIVATE MEMBERS
 
-    private static void SetValue<TSource>(string requestPath, TSource source, JsonElement? value)
+    private static void SetValue<TSource, TModel>(RequestOperation<TModel> operation, TSource source, JsonElement? value)
+        where TModel : class
     {
+        ArgumentNullException.ThrowIfNull(operation);
         try
         {
             Type sourceType = source.GetType();
-            IEnumerable<string> modelProperties = requestPath.Split('.');
+            IEnumerable<string> modelProperties = operation.Property.Split('.');
             object sourceTraget = source;
             object sourceTargetParent = source;
             PropertyInfo property = null;
@@ -44,25 +48,20 @@ internal sealed class PatchRequestContractResolver : IPatchRequestContractResolv
 
                 sourceType = property.PropertyType;
 
-                checkType = !sourceType.IsPrimitive &&
-                    sourceType != typeof(string) &&
-                    !sourceType.Name.StartsWith(typeof(Nullable).Name) &&
-                    !sourceType.IsValueType;
-
-                if (checkType)
+                if (checkType = IsValueTypeOrPrimitive(sourceType))
                 {
                     sourceTargetParent = sourceTraget;
                     sourceTraget = property.GetValue(sourceTraget);
                 }
             }
 
-            if (value is null || value.Value.ValueKind == JsonValueKind.Null || value.Value.ValueKind == JsonValueKind.Undefined)
+            if (IsValueUndefinedOrNull(value))
             {
                 property?.SetValue(checkType ? sourceTargetParent : sourceTraget, default);
                 return;
             }
 
-            if (value.Value.ValueKind == JsonValueKind.Object)
+            if (IsValueObjectOrArray(value.Value))
             {
                 sourceTraget = sourceTargetParent;
             }
@@ -87,6 +86,23 @@ internal sealed class PatchRequestContractResolver : IPatchRequestContractResolv
             propertyName,
             BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) ??
             throw new InvalidOperationException($"Property {propertyName} not found!");
+    }
+
+    private static bool IsValueUndefinedOrNull(JsonElement? jsonElement)
+    {
+        return jsonElement is null ||
+            jsonElement.Value.ValueKind == JsonValueKind.Null ||
+            jsonElement.Value.ValueKind == JsonValueKind.Undefined;
+    }
+
+    private static bool IsValueTypeOrPrimitive(Type type)
+    {
+        return !type.IsPrimitive && type != typeof(string) && !type.IsValueType;
+    }
+
+    private static bool IsValueObjectOrArray(JsonElement jsonElement)
+    {
+        return jsonElement.ValueKind == JsonValueKind.Object || jsonElement.ValueKind == JsonValueKind.Array;
     }
 
     #endregion
