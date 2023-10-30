@@ -6,6 +6,8 @@ public sealed class HomeRequest
 {
     public Guid Id { get; set; }
     public AddressRequest Address { get; set; }
+    public IEnumerable<Address> Addresses { get; set; }
+    public int[] Array { get; set; } = new int[5];
 }
 
 public sealed class AddressRequest
@@ -27,7 +29,7 @@ public sealed class ReplaceActionsTests : ActionsTest
         {
             Action = "replace",
             Property = $"{nameof(Home.Id)}",
-            Value = "ed8215fc-cbab-4dab-a28f-eed7dc128e5f"
+            Value = new Guid("ed8215fc-cbab-4dab-a28f-eed7dc128e5f")
         });
 
         var requested = ConvertAsRequested(patchRequest);
@@ -146,7 +148,7 @@ public sealed class ReplaceActionsTests : ActionsTest
         PatchRequest<HomeRequest> patchRequest = CreatePatchWithOperations(new RequestOperation<HomeRequest>()
         {
             Action = "replace",
-            Property = $"{nameof(Home.Number)}",
+            Property = $"{nameof(Home.Array)}",
             Value = new AddressRequest
             {
                 City = "Batumi",
@@ -173,5 +175,39 @@ public sealed class ReplaceActionsTests : ActionsTest
         {
             Assert.False(result.Succeeded, error.Description);
         }
+    }
+
+    [Fact]
+    public void ReplaceArrayPropertyTypeTest()
+    {
+        var newAddressArray = new[]
+        {
+            new Address("Tbilisi", "Sturua"),
+            new Address("Batumi", "Agmashenebeli")
+        };
+
+        var oldAddressArray = new[]
+        {
+            new Address("Tbilisi", "Sturua11111"),
+            new Address("Batumi", "Agmashenebeli1111")
+        };
+
+        Guid id = new("983f689b-55fc-43d6-8c40-763a48010718");
+        Home home = new(id, "27", 3, 1, new("Tbilisi", "Sturua"), oldAddressArray);
+        Home homeExpected = home with { Addresses = newAddressArray };
+
+        PatchRequest<HomeRequest> patchRequest = CreatePatchWithOperations(new RequestOperation<HomeRequest>()
+        {
+            Action = "replace",
+            Property = $"{nameof(Home.Addresses)}",
+            Value = newAddressArray
+        });
+
+        var requested = ConvertAsRequested(patchRequest);
+
+        RequestResult result = requested.Apply(home);
+
+        Assert.Equivalent(home, homeExpected);
+        Assert.True(result.Succeeded);
     }
 }

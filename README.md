@@ -8,7 +8,7 @@ helps to process patch request from the minimalAPI
 Install my-project with dotnet-cli
 
 ```bash
-  dotnet add package PatchRequestMinimal --version 7.0.17
+  dotnet add package PatchRequestMinimal --version 7.0.18
 ```
     
 ## Features
@@ -29,7 +29,8 @@ public sealed record NestedModel(Guid Id, string Name, int? Value);
 
 public sealed record RequestModel(string Title, 
     int Number,
-    NestedModel NestedObject);
+    NestedModel NestedObject,
+    IEnumerable<int> IntArray);
 
 //================================================================
 // Destination Entity 
@@ -37,7 +38,8 @@ public sealed record RequestModel(string Title,
 public sealed record NestedEntity(Guid Id, string Name, int? Value);
 public sealed record SourceEntity(string Title, 
     int Number,
-    NestedEntity NestedObject);
+    NestedEntity NestedObject,
+    IEnumerable<int> IntArray);
 
 //================================================================
 // Patch endpoint into Program.cs
@@ -80,6 +82,11 @@ app.MapPatch("patch-test/{id}", (Guid id,
                 "op": "remove",
                 "prop": "nestedObject.value",
                 "value": null
+            },
+            {
+                "op": "replace",
+                "prop": "intArray",
+                "value": [1, 2, 3, 4]
             }
         ]
     }
