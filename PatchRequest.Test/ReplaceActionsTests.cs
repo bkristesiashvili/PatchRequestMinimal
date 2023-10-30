@@ -208,5 +208,6 @@ public sealed class ReplaceActionsTests : ActionsTest
         RequestResult result = requested.Apply(home);
 
         Assert.Equivalent(home, homeExpected);
+        Assert.True(result.Succeeded);
     }
 }
