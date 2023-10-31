@@ -2,20 +2,6 @@ using PatchRequest.Resolvers;
 
 namespace PatchRequest.Tests;
 
-public sealed class HomeRequest
-{
-    public Guid Id { get; set; }
-    public AddressRequest Address { get; set; }
-    public IEnumerable<Address> Addresses { get; set; }
-    public int[] Array { get; set; } = new int[5];
-}
-
-public sealed class AddressRequest
-{
-    public string City { get; set; }
-    public string Street { get; set; }
-}
-
 public sealed class ReplaceActionsTests : ActionsTest
 {
     [Fact]
@@ -208,6 +194,29 @@ public sealed class ReplaceActionsTests : ActionsTest
         RequestResult result = requested.Apply(home);
 
         Assert.Equivalent(home, homeExpected);
+        Assert.True(result.Succeeded);
+    }
+
+    [Fact]
+    public void ReplaceEnumPropertyTest()
+    {
+        Guid id = new("983f689b-55fc-43d6-8c40-763a48010718");
+        Home home = new(id, "27", 3, 1, new("Tbilisi", "Sturua"), null, null, 
+            SellStatuses.Available);
+        Home homeExpected = home with { Status = SellStatuses.Sold };
+
+        PatchRequest<Home> patchRequest = CreatePatchWithOperations(new RequestOperation<Home>()
+        {
+            Action = "replace",
+            Property = $"{nameof(Home.Status)}",
+            Value = 0
+        });
+
+        var requested = ConvertAsRequested(patchRequest);
+
+        RequestResult result = requested.Apply(home);
+
+        Assert.Equal(homeExpected, home);
         Assert.True(result.Succeeded);
     }
 }
