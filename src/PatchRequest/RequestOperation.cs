@@ -20,7 +20,7 @@ public sealed class RequestOperation<TModel> where TModel : class
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(Value);
 
-        _requestResolver.ValidateModel(this);
+        _requestResolver.ValidateModel(this, source);
         _requestResolver.Replace(this, source, Value);
     }
 
@@ -29,7 +29,7 @@ public sealed class RequestOperation<TModel> where TModel : class
         ArgumentException.ThrowIfNullOrEmpty(Property);
         ArgumentNullException.ThrowIfNull(source);
 
-        _requestResolver.ValidateModel(this);
+        _requestResolver.ValidateModel(this, source);
         _requestResolver.Remove(this, source);
     }
 }

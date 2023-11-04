@@ -1,5 +1,8 @@
-﻿using System.Reflection;
-using System.Security.AccessControl;
+﻿using PatchRequest.Extensions;
+
+using System.Collections;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json;
 
 namespace PatchRequest.Resolvers;
@@ -16,15 +19,52 @@ internal sealed class PatchRequestContractResolver : IPatchRequestContractResolv
     public void Remove<TSource, TModel>(RequestOperation<TModel> operation, TSource source) where TModel : class
         => SetValue(operation, source, default);
 
-    public void ValidateModel<TModel>(RequestOperation<TModel> operation) where TModel : class
+    public void ValidateModel<TModel>(RequestOperation<TModel> operation, object source) where TModel : class
     {
-        Type sourceType = typeof(TModel);
-        IEnumerable<string> modelProperties = operation.Property.Split('.');
-        foreach (var modelProperty in modelProperties)
+        ArgumentNullException.ThrowIfNull(source);
+
+        try
         {
-            PropertyInfo property = GetProperty(sourceType, modelProperty);
-            sourceType = property.PropertyType;
+            Type sourceType = typeof(TModel);
+            IEnumerable<string> modelProperties = operation.Property.GetPropertisTree();
+            PropertyInfo property = null;
+            foreach (var modelProperty in modelProperties)
+            {
+                if (modelProperty.IsArrayType())
+                {
+                    var propertyName = modelProperty.HoldPropertyName();
+                    var propertyValueIndex = modelProperty.HoldIndexOnly();
+
+                    property = GetProperty(sourceType, propertyName);
+
+                    var propertyVlaueArray = (property.GetValue(source) as IEnumerable<object>)?.ToArray();
+
+                    if (propertyValueIndex + 1 > propertyVlaueArray.Length)
+                    {
+                        throw new IndexOutOfRangeException();
+                    }
+
+                    source = propertyVlaueArray[propertyValueIndex];
+                    sourceType = source.GetType();
+                    continue;
+                }
+
+                property = GetProperty(sourceType, modelProperty);
+                sourceType = property.PropertyType;
+            }
         }
+#if DEBUG
+        catch (Exception ex)
+        {
+            Debug.Assert(false, ex.Message);
+            throw;
+        }
+#else
+        catch (Exception)
+        {
+            throw;
+        }
+#endif
     }
 
     #region PRIVATE MEMBERS
